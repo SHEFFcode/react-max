@@ -10,7 +10,8 @@ class App extends Component {
         { name: 'Jeremy', age: 29 },
         { name: 'Manu', age: 28 },
         { name: 'Stephanie', age: 26 },
-      ]
+      ],
+      showPersons: false
     }
   }
 
@@ -33,6 +34,10 @@ class App extends Component {
     })
   }
 
+  onTogglePersons(event) {
+    this.setState({ showPersons: true });
+  }
+
   render() {
     const style = {
       backgroundColor: 'white',
@@ -42,18 +47,28 @@ class App extends Component {
       cursor: 'pointer'
     };
 
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <Person name={this.state.persons[0].name} age={this.state.persons[0].age} />
+          <Person
+            name={this.state.persons[1].name}
+            age={this.state.persons[1].age}
+            changed={this.onNameChange.bind(this)}
+          >
+            My hobbies are wrestling
+          </Person>
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <div> Hi I'm a react app</div>
-        <button style={style} onClick={this.onSwitchName.bind(this)}>Switch name</button>
-        <Person name={this.state.persons[0].name} age={this.state.persons[0].age} />
-        <Person 
-          name={this.state.persons[1].name} 
-          age={this.state.persons[1].age} 
-          changed={this.onNameChange.bind(this)}
-        >
-          My hobbies are wrestling
-        </Person>
+        <button style={style} onClick={this.onTogglePersons.bind(this)}>Switch name</button>
+        {persons}
       </div>
     );
   }
