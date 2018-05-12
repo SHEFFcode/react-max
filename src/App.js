@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Person from './Person/Person';
 import './App.css';
+import Radium, {StyleRoot} from 'radium';
 
 class App extends Component {
   constructor() {
@@ -15,16 +16,9 @@ class App extends Component {
     }
   }
 
-  onSwitchName() {
-    this.setState({
-      persons: [
-        { name: 'Max', age: 29 },
-        { name: 'Manu', age: 28 },
-        { name: 'Stephanie', age: 27 },]
-    })
-  }
+  onNameChange(id, event) {
+    const person = this.state.persons[id];
 
-  onNameChange(event) {
     this.setState({
       persons: [
         { name: 'Max', age: 29 },
@@ -35,16 +29,27 @@ class App extends Component {
   }
 
   onTogglePersons(event) {
-    this.setState({ showPersons: true });
+    this.setState({ showPersons: !this.state.showPersons });
+  }
+
+  onDeletePerson(personIndex, e) {
+    const persons = [...this.state.persons];
+    persons.splice(personIndex, 1);
+    this.setState({ persons });
   }
 
   render() {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 
     let persons = null;
@@ -52,26 +57,47 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          <Person name={this.state.persons[0].name} age={this.state.persons[0].age} />
-          <Person
-            name={this.state.persons[1].name}
-            age={this.state.persons[1].age}
-            changed={this.onNameChange.bind(this)}
-          >
-            My hobbies are wrestling
-          </Person>
+          {this.state.persons.map((person, index) => {
+            return (
+              <Person
+                name={person.name}
+                age={person.age}
+                click={this.onDeletePerson.bind(this, index)}
+                key={index}
+                changed={this.onNameChange.bind(this, index)}
+              />
+            )
+          })}
         </div>
       );
+
+      style.backgroundColor = 'red';
+      style[':hover'] = {
+        backgroundColor: 'lightred',
+        color: 'black'
+      }
+    }
+
+    let classes = [];
+
+    if (this.state.persons.length <= 2) {
+      classes.push('red');
+    }
+
+    if (this.state.persons.length <= 1) {
+      classes.push('bold');
     }
 
     return (
-      <div className="App">
-        <div> Hi I'm a react app</div>
-        <button style={style} onClick={this.onTogglePersons.bind(this)}>Switch name</button>
-        {persons}
-      </div>
+      <StyleRoot>
+        <div className="App">
+          <div className={classes.join(' ')}> Hi I'm a react app</div>
+          <button style={style} onClick={this.onTogglePersons.bind(this)}>Switch name</button>
+          {persons}
+        </div>
+      </StyleRoot>
     );
   }
 }
 
-export default App;
+export default Radium(App);
