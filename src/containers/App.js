@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import Person from './Person/Person';
+import Person from '../components/Persons/Person/Person';
 import './App.css';
-import Radium, {StyleRoot} from 'radium';
+import Radium, { StyleRoot } from 'radium';
+// import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   constructor() {
@@ -62,8 +63,8 @@ class App extends Component {
               <Person
                 name={person.name}
                 age={person.age}
-                click={this.onDeletePerson.bind(this, index)}
                 key={index}
+                click={this.onDeletePerson.bind(this, index)}
                 changed={this.onNameChange.bind(this, index)}
               />
             )
