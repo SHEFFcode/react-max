@@ -1,6 +1,7 @@
 import React from 'react';
 import './Person.css';
 import Radium from 'radium';
+import PropTypes from 'prop-types';
 
 const person = (props) => {
   const style = {
@@ -16,6 +17,13 @@ const person = (props) => {
       <input type="text" onChange={props.changed} value={props.name}/>
     </div>
   );
+}
+
+Person.PropTypes = {
+  click: PropTypes.func,
+  name: PropTypes.string,
+  age: PropTypes.number,
+  changed: PropTypes.func
 }
 
 export default Radium(person);
